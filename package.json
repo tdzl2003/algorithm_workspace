@@ -1,0 +1,26 @@
+{
+  "name": "algorithm_workspace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "bundle:cpp": "node scripts/bundle ./cpp/cpp.cpp ./bundled/bundled.cpp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tdzl2003/algorithm_workspace.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tdzl2003/algorithm_workspace/issues"
+  },
+  "homepage": "https://github.com/tdzl2003/algorithm_workspace#readme",
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@types/node": "^20.4.0"
+  }
+}

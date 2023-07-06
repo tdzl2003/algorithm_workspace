@@ -1,0 +1,12 @@
+node_modules
+scripts/*.js
+cpp/.vs/**/*
+cpp/out/**/*
+bundled/**/*
+
+in.txt
+out.txt
+!cpp/.vs/launch.vs.json
+temp.*
+
+main.cpp

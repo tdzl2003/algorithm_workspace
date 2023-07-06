@@ -1,0 +1,9 @@
+#include "tdzl/common.hpp"
+
+struct Solution {
+    void work() {
+    }
+};
+
+//#include "tdzl/main/multicase.hpp"
+#include "tdzl/main/singlecase.hpp"
