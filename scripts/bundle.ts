@@ -27,13 +27,50 @@ function* processFile(fn: string) {
   }
 }
 
-async function main(input: string, output: string) {
+async function bundle(input: string, output: string) {
+  processedMap.clear();
   const outputStream = fs.createWriteStream(output, 'utf-8');
+  console.log('Bundling...');
   Readable.from(processFile(path.resolve(input)))
     .pipe(outputStream)
     .on('finish', () => {
-      console.log('Done.');
+      console.log('Bundled.');
     });
 }
 
-main(process.argv[2], process.argv[3]);
+const mainFn = './cpp/main.cpp';
+const bundleFn = './bundled/bundled.cpp';
+
+async function main() {
+  const watcher = fs.promises.watch('./cpp', {
+    recursive: true,
+  });
+  let timer = null;
+  let bundling = false,
+    pending = false;
+  console.log('Watching...');
+
+  for await (const event of watcher) {
+    if (event.eventType != 'change' || !/\.[ch]pp$/.test(event.filename)) {
+      continue;
+    }
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(async () => {
+      if (pending) {
+        return;
+      }
+      pending = true;
+      while (bundling) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+      bundling = true;
+      await bundle(mainFn, bundleFn);
+      bundling = false;
+      pending = false;
+    }, 500);
+  }
+}
+
+main();

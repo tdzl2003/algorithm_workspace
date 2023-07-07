@@ -44,7 +44,7 @@ istream& operator >>(istream& in, pair<T1, T2>& vec) {
 }
 
 template <typename T>
-ostream& operator <<(ostream& out, vector<T>& vec) {
+ostream& operator <<(ostream& out, const vector<T>& vec) {
     bool flag = false;
     for (auto& v : vec) {
         if (flag) {

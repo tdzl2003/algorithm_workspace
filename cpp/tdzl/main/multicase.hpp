@@ -5,6 +5,7 @@ int main()
     cin.tie(0);
     int T = 1;
     cin >> T;
+
     while (T--)
     {
         Solution s;

@@ -1,0 +1,26 @@
+#include "tdzl/common.hpp"
+
+#ifndef ONLINE_JUDGE
+struct Interactive {
+    int query() {
+        return 1;
+    }
+};
+#else
+struct Interactive {
+    int query() {
+        int x;
+        cin >> x;
+        return x;
+    }
+};
+#endif
+
+struct Solution {
+    void work() {
+
+    }
+};
+
+//#include "tdzl/main/multicase.hpp"
+#include "tdzl/main/singlecase.hpp"

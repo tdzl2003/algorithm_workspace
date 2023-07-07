@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "postinstall": "tsc",
     "tsc": "tsc",
-    "bundle:cpp": "node scripts/bundle ./cpp/cpp.cpp ./bundled/bundled.cpp"
+    "bundle:cpp": "node scripts/bundle"
   },
   "repository": {
     "type": "git",
