@@ -1,6 +1,12 @@
-// modified from https://github.com/atcoder/ac-library/blob/master/atcoder/fenwicktree.hpp
+#pragma once
 
-template <class T> struct fenwick_tree {
+// 树状数组
+// 支持逆元的操作可以实现区间求和
+// 不支持逆元的操作也可以实现前缀求和
+// source: https://github.com/atcoder/ac-library/blob/master/atcoder/fenwicktree.hpp
+
+template <class T>
+struct fenwick_tree {
   public:
     fenwick_tree() : _n(0) {}
     explicit fenwick_tree(int n) : _n(n), data(n) {}
@@ -19,10 +25,6 @@ template <class T> struct fenwick_tree {
         return sum(r) - sum(l);
     }
 
-  private:
-    int _n;
-    std::vector<T> data;
-
     T sum(int r) {
         T s = 0;
         while (r > 0) {
@@ -31,4 +33,8 @@ template <class T> struct fenwick_tree {
         }
         return s;
     }
+
+  private:
+    int _n;
+    std::vector<T> data;
 };

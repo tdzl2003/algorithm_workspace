@@ -7,6 +7,6 @@ bundled/**/*
 in.txt
 out.txt
 !cpp/.vs/launch.vs.json
-temp.*
+thoughts.md
 
 main.cpp

@@ -6,12 +6,16 @@ const processedMap = new Set<string>();
 
 function* processFile(fn: string) {
   const data = fs.readFileSync(fn, 'utf-8');
-  for (const line of data.split('\n')) {
+  for (const t of data.split('\n')) {
+    const line = t.trim();
     if (line == '#pragma once') {
       if (processedMap.has(fn)) {
         return;
       }
       processedMap.add(fn);
+      continue;
+    }
+    if (line.startsWith('//') || !line) {
       continue;
     }
     const m = /^#include "(.*)"$/.exec(line);
@@ -31,6 +35,10 @@ async function bundle(input: string, output: string) {
   processedMap.clear();
   const outputStream = fs.createWriteStream(output, 'utf-8');
   console.log('Bundling...');
+  outputStream.write(`#ifndef ONLINE_JUDGE
+#define ONLINE_JUDGE
+#endif
+`);
   Readable.from(processFile(path.resolve(input)))
     .pipe(outputStream)
     .on('finish', () => {
@@ -66,7 +74,11 @@ async function main() {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
       bundling = true;
-      await bundle(mainFn, bundleFn);
+      try {
+        await bundle(mainFn, bundleFn);
+      } catch (e) {
+        console.warn(e.stack);
+      }
       bundling = false;
       pending = false;
     }, 500);

@@ -20,7 +20,10 @@
 #include <iomanip>
 #include <complex>
 #include <stdint.h>
+#include <type_traits>
+#include <numeric>
 using namespace std;
+
 
 typedef unsigned long long ULL;
 #define REP(i,f,t) for (int i = (f); i < (t); i++)

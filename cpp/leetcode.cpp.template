@@ -1,0 +1,12 @@
+#include "tdzl/common.hpp"
+
+struct Solution {
+    void work() {
+    }
+};
+
+#ifndef ONLINE_JUDGE
+int main() {
+    return 0;
+}
+#endif
