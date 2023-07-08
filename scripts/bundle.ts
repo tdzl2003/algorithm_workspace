@@ -27,7 +27,7 @@ function* processFile(fn: string) {
       }
       continue;
     }
-    yield line + '\n';
+    yield t + '\n';
   }
 }
 
