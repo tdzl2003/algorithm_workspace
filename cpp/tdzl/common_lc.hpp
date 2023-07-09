@@ -1,5 +1,4 @@
-#pragma once
-
+#ifndef ONLINE_JUDGE
 #include <iostream>
 #include <stdio.h>
 #include <algorithm>
@@ -23,15 +22,12 @@
 #include <type_traits>
 #include <numeric>
 using namespace std;
+#endif
 
 typedef long long LL;
 typedef unsigned long long ULL;
 #define REP(i,f,t) for (int i = (f); i < (t); i++)
 
-inline void YesNo(bool flag) {
-    if (flag) cout << "Yes" << endl;
-    else  cout << "No" << endl;
-}
 
 template <typename T>
 istream& operator >>(istream& in, vector<T>& vec) {
@@ -60,12 +56,3 @@ ostream& operator <<(ostream& out, const vector<T>& vec) {
     }
     return out;
 }
-
-#ifndef ONLINE_JUDGE
-void io_redirect() {
-    freopen("in.txt", "rt", stdin);
-}
-#else
-void io_redirect() {}
-#endif
-
