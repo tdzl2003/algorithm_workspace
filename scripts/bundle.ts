@@ -3,6 +3,7 @@ import * as path from 'path';
 import { Readable } from 'stream';
 
 const processedMap = new Set<string>();
+const processedLibMap = new Set<string>();
 
 function* processFile(fn: string) {
   const data = fs.readFileSync(fn, 'utf-8');
@@ -27,12 +28,23 @@ function* processFile(fn: string) {
       }
       continue;
     }
+    const m1 = /^#include <(.*)>$/.exec(line);
+    if (m1) {
+      if (processedLibMap.has(m1[1])) {
+        continue;
+      }
+      processedLibMap.add(m1[1]);
+      yield t + '\n';
+      continue;
+    }
+
     yield t + '\n';
   }
 }
 
 async function bundle(input: string, output: string) {
   processedMap.clear();
+  processedLibMap.clear();
   const outputStream = fs.createWriteStream(output, 'utf-8');
   console.log('Bundling...');
   outputStream.write(`#ifndef ONLINE_JUDGE
@@ -40,10 +52,14 @@ async function bundle(input: string, output: string) {
 #endif
 `);
   Readable.from(processFile(path.resolve(input)))
-    .pipe(outputStream)
-    .on('finish', () => {
+    .on('error', (err) => {
+      console.warn(err.stack);
+      console.log('Bundle failed.');
+    })
+    .on('end', () => {
       console.log('Bundled.');
-    });
+    })
+    .pipe(outputStream);
 }
 
 const mainFn = './cpp/main.cpp';
@@ -58,6 +74,25 @@ async function main() {
     pending = false;
   console.log('Watching...');
 
+  async function doBundle() {
+    if (pending) {
+      return;
+    }
+    pending = true;
+    while (bundling) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+    bundling = true;
+    try {
+      await bundle(mainFn, bundleFn);
+    } catch (e) {
+      console.warn(e.stack);
+    }
+    bundling = false;
+    pending = false;
+  }
+  doBundle();
+
   for await (const event of watcher) {
     if (event.eventType != 'change' || !/\.[ch]pp$/.test(event.filename)) {
       continue;
@@ -65,23 +100,7 @@ async function main() {
     if (timer) {
       clearTimeout(timer);
     }
-    timer = setTimeout(async () => {
-      if (pending) {
-        return;
-      }
-      pending = true;
-      while (bundling) {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      }
-      bundling = true;
-      try {
-        await bundle(mainFn, bundleFn);
-      } catch (e) {
-        console.warn(e.stack);
-      }
-      bundling = false;
-      pending = false;
-    }, 500);
+    timer = setTimeout(doBundle, 500);
   }
 }
 
