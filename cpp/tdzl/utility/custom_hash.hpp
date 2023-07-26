@@ -1,6 +1,8 @@
 #pragma once
 #include <chrono>
 
+// usage: unordered_map<long long, long long, custom_hash<int64_t> > map;
+
 template<typename T>
 struct custom_hash {};
 

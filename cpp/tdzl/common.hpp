@@ -1,5 +1,5 @@
 #pragma once
-
+#ifndef NO_STD_INCLUDES
 #include <iostream>
 #include <stdio.h>
 #include <algorithm>
@@ -23,6 +23,7 @@
 #include <type_traits>
 #include <numeric>
 using namespace std;
+#endif
 
 typedef long long LL;
 typedef unsigned long long ULL;

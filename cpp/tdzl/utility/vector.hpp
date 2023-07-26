@@ -32,3 +32,10 @@ T min(const vector<T>& arr) {
     }
     return ret;
 }
+
+template <typename T, typename Pred>
+void remove_if(vector<T>& arr, Pred pred) {
+    arr.erase(remove_if(arr.begin(), arr.end(), pred), arr.end());
+}
+
+

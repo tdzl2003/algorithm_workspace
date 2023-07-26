@@ -1,3 +1,7 @@
+#ifdef ONLINE_JUDGE
+#define NO_STD_INCLUDES
+#endif
+
 #include "tdzl/common.hpp"
 
 struct Solution {
