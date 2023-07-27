@@ -1,8 +1,8 @@
 #pragma once
 
-template <typename T>
-map<T, int> count(const vector<T>& arr) {
-    map<T, int> ret;
+template <typename T, typename Map = map<T, int>>
+Map count(const vector<T>& arr) {
+    Map ret;
     for (auto& v : arr) {
         ret[v]++;
     }
