@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <vector>
+#include <assert.h>
 
 // 多维动态大小数组，可以用于DP等场景。
 template <typename T, size_t dimensions>
@@ -23,6 +24,7 @@ namespace internal {
         }
 
         auto operator[] (size_t v) {
+            assert(v < vector_.dsize_[idx_dimensions - 1]);
             return md_vector_index<T, dimensions, idx_dimensions + 1>(vector_, (base_+v)*vector_.dsize_[idx_dimensions]);
         }
 
@@ -63,7 +65,7 @@ private:
     vector<T> data_;
     array<size_t, dimensions> dsize_;
 
-    template <typename U, int d1, int id1>
+    template <typename U, size_t d1, size_t id1>
     friend class internal::md_vector_index;
 };
 
