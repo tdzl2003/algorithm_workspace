@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include <vector>
 
 // 多维动态大小数组，可以用于DP等场景。
 template <typename T, size_t dimensions>
