@@ -1,4 +1,5 @@
 #pragma once
+#include "../common.hpp"
 #include <array>
 #include <vector>
 #include <assert.h>
@@ -43,7 +44,6 @@ namespace internal {
             return vector_.data_[base_ + v];
         }
 
-    private:
         md_vector<T, dimensions>& vector_;
         size_t base_;
     };
@@ -61,11 +61,13 @@ public:
     auto operator [](size_t v) {
         return internal::md_vector_index<T, dimensions, 1>(*this)[v];
     }
-private:
+
     vector<T> data_;
     array<size_t, dimensions> dsize_;
-
-    template <typename U, size_t d1, size_t id1>
-    friend class internal::md_vector_index;
 };
 
+
+template <typename T, size_t dimensions>
+istream& operator >>(istream& in, md_vector<T, dimensions>& vec) {
+    return in >> vec.data_;
+}
