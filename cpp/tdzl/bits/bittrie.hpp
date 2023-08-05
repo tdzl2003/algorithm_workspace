@@ -1,63 +1,103 @@
 #pragma once
 #include "../common.hpp"
 
+template <typename UInt = unsigned int, int D = 32>
 struct bit_trie {
 	struct node {
 		int left, right;
+        int cnt;
 	};
 
-	vector<node> nodes = { {-1, -1} };
-	unsigned int base = 0;
+	vector<node> nodes = { {-1, -1, 0} };
+	UInt base = 0;
+    size_t freeHead = -1;
 
 private:
-	void _add(unsigned int v, int d = 31, int r = 0) {
-		if (d == -1) {
+    size_t alloc() {
+        if (freeHead != (size_t)-1) {
+            size_t ret = freeHead;
+            freeHead = nodes[ret].right;
+            nodes[ret] = { -1, -1, 0 };
+            return ret;
+        }
+        size_t ret = nodes.size();
+        nodes.push_back({ -1, -1, 0 });
+        return ret;
+    }
+    void free(size_t v) {
+        nodes[v].right = freeHead;
+        freeHead = v;
+    }
+	void _add(UInt v, int d, size_t r) {
+        ++nodes[r].cnt;
+
+        if (d == -1) {
 			return;
 		}
-		auto& curr = nodes[r];
 		if (v & (1 << d)) {
-			if (curr.right < 0) {
-				curr.right = nodes.size();
-				nodes.push_back({ -1, -1 });
+			if (nodes[r].right == (size_t)-1) {
+                nodes[r].right = alloc();
 			}
-			return _add(v, d - 1, nodes[r].right);
+			_add(v, d - 1, nodes[r].right);
 		}
 		else {
-			if (curr.left < 0) {
-				curr.left = nodes.size();
-				nodes.push_back({ -1, -1 });
+			if (nodes[r].left  == (size_t)-1) {
+                nodes[r].left = alloc();
 			}
-			return _add(v, d - 1, nodes[r].left);
+			_add(v, d - 1, nodes[r].left);
 		}
 	}
-	unsigned int _max(unsigned int v = 0, int d = 31, int r =0) {
+    bool _remove(UInt v, int d, size_t r) {
+        --nodes[r].cnt;
+        if (d >= 0) {
+            if (v & (1 << d)) {
+                if (_remove(v, d - 1, nodes[r].right)) {
+                    nodes[r].right = -1;
+                }
+            }
+            else {
+                if (_remove(v, d - 1, nodes[r].left)) {
+                    nodes[r].left = -1;
+                }
+            }
+        }
+        if (!nodes[r].cnt && r > 0) {
+            free(r);
+            r = -1;
+            return true;
+        }
+        return false;
+    }
+	UInt _max(UInt v = 0, int d = 31, size_t r =0) {
 		if (d == -1) {
 			return v;
 		}
-		auto& curr = nodes[r];
-		auto bit = (1 << d);
+		UInt bit = (1 << d);
 		if (base & bit) {
-			if (curr.left > 0) {
-				return _max(v | bit, d - 1, curr.left);
+			if (nodes[r].left != (size_t)-1) {
+				return _max(v | bit, d - 1, nodes[r].left);
 			}
-			return _max(v, d - 1, curr.right);
+			return _max(v, d - 1, nodes[r].right);
 		}
 		else {
-			if (curr.right > 0) {
-				return _max(v | bit, d - 1, curr.right);
+			if (nodes[r].right != (size_t)-1) {
+				return _max(v | bit, d - 1, nodes[r].right);
 			}
-			return _max(v, d - 1, curr.left);
+			return _max(v, d - 1, nodes[r].left);
 		}
 	}
 public:
-	void add(unsigned int v) {
-		_add(v ^ base);
+	void add(UInt v) {
+		_add(v ^ base, D-1, 0);
 	}
+    void remove(UInt v) {
+        _remove(v^base, D-1, 0);
+    }
 
-	unsigned int max() {
+    UInt max() {
 		return _max();
 	}
-	unsigned int min() {
+    UInt min() {
 		base = ~base;
 		int ret = max();
 		base = ~base;
