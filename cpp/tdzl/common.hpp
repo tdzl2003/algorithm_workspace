@@ -34,17 +34,17 @@ inline void YesNo(bool flag) {
     else  cout << "No" << endl;
 }
 
+template <typename T1, typename T2>
+istream& operator >>(istream& in, pair<T1, T2>& vec) {
+    return in >> vec.first >> vec.second;
+}
+
 template <typename T>
 istream& operator >>(istream& in, vector<T>& vec) {
     for (auto& v : vec) {
         in >> v;
     }
     return in;
-}
-
-template <typename T1, typename T2>
-istream& operator >>(istream& in, pair<T1, T2>& vec) {
-    return in >> vec.first >> vec.second;
 }
 
 template <typename T>
