@@ -35,6 +35,7 @@ public:
 
 	bool isPrime(unsigned int v) {
 		if (v == 1) { return false; }
+        if (v <= n) { return !minPrime[v]; }
 		for (auto p : primes) {
 			if (v <= p) return true;
 			if (v % p == 0) return false;
@@ -44,6 +45,7 @@ public:
 
     bool isPrime(unsigned long long v) {
 		if (v == 1) { return false; }
+        if (v <= n) { return !minPrime[v]; }
 		for (auto p : primes) {
 			if (v <= p) return true;
 			if (v % p == 0) return false;
