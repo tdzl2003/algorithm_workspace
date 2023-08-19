@@ -1,5 +1,8 @@
 #include "./convolution.hpp"
 
+// 在线卷积，每次输入f和g的各一个数，求出到当前位置为止的卷积
+// 均摊复杂度 O(Nlg^2N)
+
 template <typename mint>
 struct online_conv {
     vector<mint> f, g;
