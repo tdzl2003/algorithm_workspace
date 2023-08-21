@@ -2,6 +2,7 @@
 
 // 在线卷积，每次输入f和g的各一个数，求出到当前位置为止的卷积
 // 均摊复杂度 O(Nlg^2N)
+// reference: https://qiita.com/Kiri8128/items/1738d5403764a0e26b4c
 
 template <typename mint>
 struct online_conv {
@@ -26,32 +27,20 @@ struct online_conv {
         f.push_back(a);
         g.push_back(b);
         result.resize(result.size() + 2);
-
-        idx++;
-
-        if (idx == 1) {
+        if (idx == 0) {
             result[0] = a * b;
-            return result[0];
-        }
-        if (idx == 2) {
-            result[1] = f[0] * b + g[0] * a;
-            result[2] = a * b;
-            return result[1];
+            return result[idx++];
         }
 
-        result[idx - 1] += f[0] * b;
-        result[idx] += f[1] * b;
-        result[idx - 1] += g[0] * a;
-        result[idx] += g[1] * a;
-
-        for (int pw = 2; pw < idx && idx % pw == 0; pw <<= 1) {
+        result[idx] += a * g[0] + b * f[0];
+        for (int pw = 2; pw <= idx && (idx+2) % pw == 0; pw <<= 1) {
             // conv with pw * pw size
-            conv(pw, idx - pw, pw);
-            if (pw * 2 != idx) {
-                conv(idx - pw, pw, pw);
+            conv(pw-1, idx-pw+1, pw);
+            if (pw*2 != idx+2) {
+                conv(idx-pw+1, pw-1, pw);
             }
         }
 
-        return result[idx - 1];
+        return result[idx++];
     }
 };
