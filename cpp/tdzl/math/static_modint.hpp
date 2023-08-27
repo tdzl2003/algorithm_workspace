@@ -134,15 +134,15 @@ private:
 // using modint998244353 = static_modint<998244353>;
 // using modint1000000007 = static_modint<1000000007>;
 
-template <int mod>
-istream& operator >>(istream& in, static_modint<mod>& mint) {
+template <class mint, is_static_modint_t<mint>* = nullptr>
+istream& operator >>(istream& in, mint& val) {
     int v;
     cin >> v;
-    mint = v;
+    val = v;
     return in;
 }
 
-template <int mod>
-ostream& operator <<(ostream& out, const static_modint<mod>& mint) {
-    return out << mint.val();
+template <class mint, is_static_modint_t<mint>* = nullptr>
+ostream& operator <<(ostream& out, mint v) {
+    return out << v.val();
 }
