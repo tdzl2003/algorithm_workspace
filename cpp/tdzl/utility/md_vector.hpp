@@ -71,6 +71,15 @@ public:
         return internal::md_vector_index<T, dimensions, 1>(*this)[v];
     }
 
+    T& operator [](array<size_t, dimensions> idx) {
+        size_t base = 0;
+        for (int i = 0; i < dimensions; i++) {
+            base *= dsize_[i];
+            base += idx[i];
+        }
+        return data_[base];
+    }
+
     vector<T> data_;
     array<size_t, dimensions> dsize_;
 };
@@ -79,4 +88,18 @@ public:
 template <typename T, size_t dimensions>
 istream& operator >>(istream& in, md_vector<T, dimensions>& vec) {
     return in >> vec.data_;
+}
+
+template <typename T, size_t dimensions>
+void make_md_presum(md_vector<T, dimensions>& vec) {
+    size_t diff = 1, base= 0;
+    for (int currD = dimensions - 1; currD >= 0; currD--) {
+        base = diff * vec.dsize_[currD];
+        for (size_t i = 0; i+diff < vec.data_.size(); i++) {
+            if (i % base + diff < base) {
+                vec.data_[i + diff] += vec.data_[i];
+            }
+        }
+        diff = base;
+    }
 }
