@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "tsc",
     "tsc": "tsc",
-    "bundle:cpp": "node scripts/bundle"
+    "start": "node scripts/bundle"
   },
   "repository": {
     "type": "git",

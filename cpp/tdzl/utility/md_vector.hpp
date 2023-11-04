@@ -53,6 +53,7 @@ namespace internal {
 template <typename T, size_t dimensions>
 class md_vector {
 public:
+    md_vector() {}
     md_vector(md_vector<T, dimensions>&& other): data_(other.data_), dsize_(other.dsize_) {
     }
 
