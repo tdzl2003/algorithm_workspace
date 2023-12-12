@@ -62,6 +62,11 @@ ostream& operator <<(ostream& out, const vector<T>& vec) {
     return out;
 }
 
+template <typename T1, typename T2>
+ostream& operator <<(ostream& out, const pair<T1, T2>& vec) {
+    return out << vec.first << ' ' << vec.second;
+}
+
 #ifndef ONLINE_JUDGE
 void io_redirect() {
     freopen("in.txt", "rt", stdin);

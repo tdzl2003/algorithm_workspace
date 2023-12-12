@@ -38,4 +38,13 @@ void remove_if(vector<T>& arr, Pred pred) {
     arr.erase(remove_if(arr.begin(), arr.end(), pred), arr.end());
 }
 
-
+template <typename T>
+int ReduceRange(vector<T>& A) {
+    vector<T> tmp = A;
+    sort(tmp.begin(), tmp.end());
+    tmp.erase(unique(tmp.begin(), tmp.end()), tmp.end());
+    for (auto& v : A) {
+        v = lower_bound(tmp.begin(), tmp.end(), v) - tmp.begin();
+    }
+    return tmp.size();
+}
