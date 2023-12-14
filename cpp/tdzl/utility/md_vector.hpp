@@ -59,6 +59,11 @@ public:
     md_vector(const md_vector<T, dimensions>& other) : data_(other.data_), dsize_(other.dsize_) {
     }
 
+    md_vector(array<ll, dimensions> dsize, T default_value = T())
+        : dsize_(dsize), data_(internal::md_size(dsize), default_value)
+    {
+    }
+
     md_vector(array<size_t, dimensions> dsize, T default_value = T())
         : dsize_(dsize), data_(internal::md_size(dsize), default_value)
     {

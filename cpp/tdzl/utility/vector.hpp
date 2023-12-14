@@ -9,6 +9,15 @@ Map count(const vector<T>& arr) {
     return ret;
 }
 
+template <typename T, typename U = T>
+U sum(const vector<T>& arr) {
+    U ret = U();
+    for (auto& v : arr) {
+        ret += v;
+    }
+    return ret;
+}
+
 template <typename T>
 T max(const vector<T>& arr) {
     if (arr.size() == 0) {

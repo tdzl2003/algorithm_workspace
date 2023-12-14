@@ -67,6 +67,10 @@ ostream& operator <<(ostream& out, const pair<T1, T2>& vec) {
     return out << vec.first << ' ' << vec.second;
 }
 
+typedef long long ll;
+typedef unsigned int uint;
+typedef unsigned long long ull;
+
 #ifndef ONLINE_JUDGE
 void io_redirect() {
     freopen("in.txt", "rt", stdin);
