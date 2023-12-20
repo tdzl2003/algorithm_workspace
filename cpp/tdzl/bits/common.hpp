@@ -10,6 +10,12 @@ int ceil_pow2(int n) {
     return x;
 }
 
+int ceil_pow2(long long n) {
+    int x = 0;
+    while ((1ULL << x) < (unsigned long long)(n)) x++;
+    return x;
+}
+
 // @param n `1 <= n`
 // @return 返回满足`(n & (1 << x)) != 0`的最小的x。返回x最低一个二进制位的下标
 constexpr int lower_bit_constexpr(unsigned int n) {
@@ -29,3 +35,4 @@ int lower_bit(unsigned int n) {
     return __builtin_ctz(n);
 #endif
 }
+

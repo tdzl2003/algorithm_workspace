@@ -26,7 +26,7 @@ void tree_dp_with_parents(const vector<int>& parent, F f) {
 
 struct tree_graph
 {
-    tree_graph(int n_ = 0): n(n_), edge_end(n) {
+    tree_graph(int n_ = 0): n(n_), edge_end_index(n) {
 
     }
     void add_edge(int u, int v) {
@@ -38,17 +38,26 @@ struct tree_graph
         sort(edges.begin(), edges.end());
         for (int i = 0; i < n; i++) {
             if (i) {
-                edge_end[i] = edge_end[i - 1];
+                edge_end_index[i] = edge_end_index[i - 1];
             }
-            while (edge_end[i] < edges.size() && edges[edge_end[i]].first == i) {
-                edge_end[i]++;
+            while (edge_end_index[i] < edges.size() && edges[edge_end_index[i]].first == i) {
+                edge_end_index[i]++;
             }
         }
     }
+    auto edge_begin(int u) {
+        if (u == 0) {
+            return edges.begin();
+        }
+        return edges.begin() + edge_end_index[u - 1];
+    }
+    auto edge_end(int u) {
+        return edges.begin() + edge_end_index[u];
+    }
     template <typename F, typename G>
     void dfs(int v, const F& pre, const G& post, int parent = -1) {
-        int start = v ? edge_end[v - 1] : 0;
-        int end = edge_end[v];
+        int start = v ? edge_end_index[v - 1] : 0;
+        int end = edge_end_index[v];
         pre(v, parent);
         for (int i = start; i < end; i++) {
             int u = edges[i].second;
@@ -61,5 +70,5 @@ struct tree_graph
 
     int n;
     vector<pair<int, int>> edges;
-    vector<int> edge_end;
+    vector<int> edge_end_index;
 };
