@@ -4,10 +4,10 @@
 
 // 无向无权图求最远点和距离
 
-pair<int, int> farest_from(vector<vector<int>> G, int start = 0) {
-    vector<int> depth(G.size(), -1);
+inline std::pair<int, int> nd_constant_graph::farest_from(int start) {
+    std::vector<int> depth(_n, -1);
     depth[start] = 0;
-    queue<int> q;
+    std::queue<int> q;
     q.push(start);
 
     int last = start;
@@ -16,7 +16,7 @@ pair<int, int> farest_from(vector<vector<int>> G, int start = 0) {
         int v = q.front();
         last = v;
         q.pop();
-        for (auto u : G[v]) {
+        for (auto u : edges_from(v)) {
             if (depth[u] >= 0) {
                 continue;
             }

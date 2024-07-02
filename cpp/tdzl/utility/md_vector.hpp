@@ -24,14 +24,14 @@ namespace internal {
         md_vector_index(md_vector<T, dimensions>& vec, size_t base = 0): vector_(vec), base_(base) {
         }
 
-        auto operator[] (size_t v) {
+        auto operator[] (size_t v)const {
             assert(v < vector_.dsize_[idx_dimensions - 1]);
             return md_vector_index<T, dimensions, idx_dimensions + 1>(vector_, (base_+v)*vector_.dsize_[idx_dimensions]);
         }
 
     private:
         md_vector<T, dimensions>& vector_;
-        size_t base_;
+        const size_t base_;
     };
 
     template <typename T, size_t dimensions>
@@ -40,12 +40,42 @@ namespace internal {
         md_vector_index(md_vector<T, dimensions>& vec, size_t base = 0) : vector_(vec), base_(base) {
         }
 
-        T& operator[] (size_t v) {
+        T& operator[] (size_t v) const {
             return vector_.data_[base_ + v];
         }
 
         md_vector<T, dimensions>& vector_;
-        size_t base_;
+        const size_t base_;
+    };
+
+    template <typename T, size_t dimensions, size_t idx_dimensions>
+    class const_md_vector_index {
+    public:
+        const_md_vector_index(const md_vector<T, dimensions>& vec, size_t base = 0) : vector_(vec), base_(base) {
+        }
+
+        auto operator[] (size_t v)const {
+            assert(v < vector_.dsize_[idx_dimensions - 1]);
+            return const_md_vector_index<T, dimensions, idx_dimensions + 1>(vector_, (base_ + v) * vector_.dsize_[idx_dimensions]);
+        }
+
+    private:
+        const md_vector<T, dimensions>& vector_;
+        const size_t base_;
+    };
+
+    template <typename T, size_t dimensions>
+    class const_md_vector_index<T, dimensions, dimensions> {
+    public:
+        const_md_vector_index(const md_vector<T, dimensions>& vec, size_t base = 0) : vector_(vec), base_(base) {
+        }
+
+        const T& operator[] (size_t v) const {
+            return vector_.data_[base_ + v];
+        }
+
+        const md_vector<T, dimensions>& vector_;
+        const size_t base_;
     };
 }
 
@@ -57,11 +87,6 @@ public:
     md_vector(md_vector<T, dimensions>&& other): data_(other.data_), dsize_(other.dsize_) {
     }
     md_vector(const md_vector<T, dimensions>& other) : data_(other.data_), dsize_(other.dsize_) {
-    }
-
-    md_vector(array<ll, dimensions> dsize, T default_value = T())
-        : dsize_(dsize), data_(internal::md_size(dsize), default_value)
-    {
     }
 
     md_vector(array<size_t, dimensions> dsize, T default_value = T())
@@ -82,6 +107,10 @@ public:
 
     auto operator [](size_t v) {
         return internal::md_vector_index<T, dimensions, 1>(*this)[v];
+    }
+
+    auto operator [](size_t v) const {
+        return internal::const_md_vector_index<T, dimensions, 1>(*this)[v];
     }
 
     T& operator [](array<size_t, dimensions> idx) {

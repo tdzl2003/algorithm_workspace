@@ -4,7 +4,6 @@
 
 template <class S, S(*op)(S, S), S(*e)()> struct segtree {
 public:
-    segtree() : segtree(0) {}
     explicit segtree(int n) : segtree(std::vector<S>(n, e())) {}
     explicit segtree(const std::vector<S>& v) : _n(int(v.size())) {
         log = ceil_pow2(_n);
