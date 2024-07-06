@@ -33,9 +33,9 @@ namespace tdzl {
 
     class bitset {
     public:
-        bitset(size_t sz = 0, bool val = 1) :
+        bitset(size_t sz = 0, bool val = false) :
             sz_(sz),
-            data_((sz + 63) >> 6, val ? -1 : 1)
+            data_((sz + 63)/64, val ? -1 : 0)
         {
             trim();
         }
@@ -50,6 +50,9 @@ namespace tdzl {
         }
 
         void resize(size_t newsz) {
+            if (newsz == sz_) {
+                return;
+            }
             if (newsz < sz_) {
                 data_.resize((newsz + 63) / 64);
                 sz_ = newsz;
@@ -119,12 +122,36 @@ namespace tdzl {
         }
 
         void clear() {
-            fill(data_.begin(), data_.end(), 0);
+            fill(data_.begin(), data_.end(), 0ULL);
         }
 
         void set() {
-            fill(data_.begin(), data_.end(), 1);
+            fill(data_.begin(), data_.end(), ~0ULL);
             trim();
+        }
+
+        void clear(size_t start, size_t end = (size_t)-1) {
+            if (start >= sz_) {
+                return;
+            }
+            end = std::min(end, sz_);
+            if (start / 64 == end / 64) {
+                data_[start / 64] &= ((1ULL << (start % 64)) - 1) | ((-1ULL) << (end % 64));
+                return;
+            }
+            if (start % 64) {
+                data_[start / 64] &= (1ULL << (start%64)) - 1;
+                start = start - start % 64 + 64;
+            }
+            start /= 64;
+            if (end % 64) {
+                data_[end / 64] &= (-1ULL) << (end % 64);
+                end = end - end % 64;
+            }
+            end /= 64;
+            if (start < data_.size()) {
+                std::fill(data_.begin() + start, data_.begin() + end, 0);
+            }
         }
 
     private:
