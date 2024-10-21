@@ -47,10 +47,15 @@ istream& operator >>(istream& in, vector<T>& vec) {
     return in;
 }
 
+template <typename T1, typename T2>
+ostream& operator <<(ostream& out, const pair<T1, T2>& vec) {
+    return out << vec.first << ' ' << vec.second;
+}
+
 template <typename T>
 ostream& operator <<(ostream& out, const vector<T>& vec) {
     bool flag = false;
-    for (auto& v : vec) {
+    for (const auto& v : vec) {
         if (flag) {
             out << ' ';
         }
@@ -60,11 +65,6 @@ ostream& operator <<(ostream& out, const vector<T>& vec) {
         out << v;
     }
     return out;
-}
-
-template <typename T1, typename T2>
-ostream& operator <<(ostream& out, const pair<T1, T2>& vec) {
-    return out << vec.first << ' ' << vec.second;
 }
 
 typedef long long ll;
