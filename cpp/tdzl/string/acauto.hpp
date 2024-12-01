@@ -15,11 +15,12 @@ public:
 
     using trie<NodeType>::nodes;
 
-    acauto(const vector<string>& dict): trie<NodeType>(dict) {
+    acauto(const vector<string>& dict) : trie<NodeType>(dict) {
         _buildFailPtr();
     }
 
-    void _buildFailPtr() {
+    template<typename F>
+    void _buildFailPtr(F f) {
         queue<pair<int, int>> q;
 
         nodes[0].parent = -1;
@@ -41,7 +42,7 @@ public:
                 }
             }
             int p = nodes[i].parent = j >= 0 ? nodes[j].children[ch] : 0;
-            nodes[i].matchCnt += nodes[p].matchCnt;
+            f(i);
 
             for (int ch = 0; ch < ABSize; ch++) {
                 if (nodes[i].children[ch] >= 0) {
@@ -51,12 +52,19 @@ public:
         }
     }
 
+    void _buildFailPtr() {
+        _buildFailPtr([](int) {});
+    }
+
 
     struct state  {
         acauto* trie_;
         int value_;
         state(acauto* t, int value = 0) : trie_(t), value_(value) {}
 
+        auto& curr() {
+            return trie_->nodes[value_];
+        }
         size_t match() {
             return trie_->nodes[value_].matchCnt;
         }
@@ -84,7 +92,7 @@ public:
         }
     };
 
-    auto make_state() {
-        return state(this);
+    auto make_state(int v = 0) {
+        return state(this, v);
     }
 };

@@ -114,4 +114,5 @@ public:
 		xor_all(v);
 		return ret;
 	}
+
 };

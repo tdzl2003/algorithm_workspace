@@ -35,6 +35,17 @@ public:
         return -parent_or_size[leader(a)];
     }
 
+    std::vector<int> group_sizes() {
+        std::vector<int> ret;
+        for (int i = 0; i < _n; i++)
+        {
+            if (parent_or_size[i] < 0) {
+                ret.push_back(-parent_or_size[i]);
+            }
+        }
+        return ret;
+    }
+
     std::vector<std::vector<int>> groups() {
         std::vector<int> leader_buf(_n), group_size(_n);
         for (int i = 0; i < _n; i++) {
