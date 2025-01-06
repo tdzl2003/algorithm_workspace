@@ -57,3 +57,12 @@ int ReduceRange(vector<T>& A) {
     }
     return tmp.size();
 }
+
+template <typename T>
+vector<T> operator+(vector<T>& A, vector<T>& B)
+{
+    vector<T> ret = A;
+    ret.insert(ret.end(), B.begin(), B.end());
+    return ret;
+}
+
