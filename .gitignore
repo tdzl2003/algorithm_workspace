@@ -10,3 +10,8 @@ out.txt
 thoughts.md
 
 main.cpp
+
+*.in
+*.out
+*.exe
+*.zip

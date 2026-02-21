@@ -6,7 +6,7 @@
 #include "./common.hpp"
 #include "./inv_gcd.hpp"
 
-struct static_modint_base {};
+struct static_modint_base: modint_base {};
 
 template <class T>
 using is_static_modint = std::is_base_of<static_modint_base, T>;

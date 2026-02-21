@@ -52,3 +52,22 @@ constexpr bool is_prime_constexpr(int n) {
 }
 template <int n> constexpr bool is_prime = is_prime_constexpr(n);
 
+struct modint_base {};
+
+template <typename T>
+struct one {
+    static T make() {
+        return 1;
+    }
+};
+
+template<typename T>
+T pow(T x, unsigned long long n) {
+    T r = one<T>::make();
+    while (n) {
+        if (n & 1) r *= x;
+        x *= x;
+        n >>= 1;
+    }
+    return r;
+}

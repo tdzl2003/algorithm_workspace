@@ -1,0 +1,10 @@
+cpp < 1.in > 1.out
+cpp < 2.in > 2.out
+cpp < 3.in > 3.out
+cpp < 4.in > 4.out
+cpp < 5.in > 5.out
+cpp < 6.in > 6.out
+cpp < 7.in > 7.out
+cpp < 8.in > 8.out
+cpp < 9.in > 9.out
+cpp < 10.in > 10.out
